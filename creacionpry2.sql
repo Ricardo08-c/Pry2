@@ -1,0 +1,805 @@
+/* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.TransType
+	(
+	TransTypeId int NOT NULL IDENTITY (1, 1),
+	name varchar(128) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.TransType ADD CONSTRAINT
+	PK_TransType PRIMARY KEY CLUSTERED 
+	(
+	TransTypeId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.TransType SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.UTMTags
+	(
+	UTMTagId bigint NOT NULL IDENTITY (1, 1),
+	name varchar(200) NOT NULL,
+	utmURL varchar(200) NOT NULL,
+	campaign varchar(168) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.UTMTags ADD CONSTRAINT
+	PK__UTMTags__5D3836C2F083BB89 PRIMARY KEY CLUSTERED 
+	(
+	UTMTagId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.UTMTags SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Users
+	(
+	UserId bigint NOT NULL IDENTITY (1, 1),
+	name nvarchar(128) NOT NULL,
+	Enabled bit NOT NULL,
+	secondName nvarchar(128) NOT NULL,
+	mail varchar(200) NOT NULL,
+	CheckSum varbinary(100) NOT NULL,
+	birthday datetime NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Users ADD CONSTRAINT
+	PK__Users__1788CC4C83F1E4FE PRIMARY KEY CLUSTERED 
+	(
+	UserId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Users SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.SocialMedia
+	(
+	SocialMediaId int NOT NULL IDENTITY (1, 1),
+	name varchar(100) NOT NULL,
+	mediaURL varchar(200) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.SocialMedia ADD CONSTRAINT
+	PK__SocialMe__3B026C1BFBF3A5D8 PRIMARY KEY CLUSTERED 
+	(
+	SocialMediaId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.SocialMedia SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.PostTypes
+	(
+	PostTypeID int NOT NULL IDENTITY (1, 1),
+	name varchar(100) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.PostTypes ADD CONSTRAINT
+	PK__PostType__AB212610BF6E1D3A PRIMARY KEY CLUSTERED 
+	(
+	PostTypeID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.PostTypes SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Posts
+	(
+	PostId bigint NOT NULL IDENTITY (1, 1),
+	name varchar(128) NOT NULL,
+	PostURL varchar(200) NOT NULL,
+	UserId bigint NULL,
+	PostTypeId int NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Posts ADD CONSTRAINT
+	PK__Posts__AA12601830DADA69 PRIMARY KEY CLUSTERED 
+	(
+	PostId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Posts ADD CONSTRAINT
+	fk_Post_UserId1 FOREIGN KEY
+	(
+	UserId
+	) REFERENCES dbo.Users
+	(
+	UserId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.Posts ADD CONSTRAINT
+	fk_Post_PostypeId1 FOREIGN KEY
+	(
+	PostTypeId
+	) REFERENCES dbo.PostTypes
+	(
+	PostTypeID
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.Posts SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.TagsxPost
+	(
+	TagsxPostID bigint NOT NULL IDENTITY (1, 1),
+	PostId bigint NOT NULL,
+	UTMtagId bigint NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.TagsxPost ADD CONSTRAINT
+	PK__TagsxPos__72C6953A981F998F PRIMARY KEY CLUSTERED 
+	(
+	TagsxPostID
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.TagsxPost ADD CONSTRAINT
+	fk_TagsxPost_PostId1 FOREIGN KEY
+	(
+	PostId
+	) REFERENCES dbo.Posts
+	(
+	PostId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.TagsxPost ADD CONSTRAINT
+	fk_TagsxPost_UTMTagId1 FOREIGN KEY
+	(
+	UTMtagId
+	) REFERENCES dbo.UTMTags
+	(
+	UTMTagId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.TagsxPost SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.PaymentStatus
+	(
+	PaymentStatusId int NOT NULL IDENTITY (1, 1),
+	name varchar(100) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.PaymentStatus ADD CONSTRAINT
+	PK__PaymentS__34F8AC3F80B24FBB PRIMARY KEY CLUSTERED 
+	(
+	PaymentStatusId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.PaymentStatus SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Merchants
+	(
+	Merchantid bigint NOT NULL IDENTITY (1, 1),
+	name varchar(200) NOT NULL,
+	Enabled bit NOT NULL,
+	MerchantURL varchar(200) NOT NULL,
+	IconURL varchar(200) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Merchants ADD CONSTRAINT
+	PK__Merchant__044E508BD4FE890F PRIMARY KEY CLUSTERED 
+	(
+	Merchantid
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Merchants SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.PaymentAttempts
+	(
+	PaymentAttemptId bigint NOT NULL IDENTITY (1, 1),
+	Amount decimal(20, 2) NOT NULL,
+	description varchar(365) NULL,
+	CurrencySymbol varchar(6) NOT NULL,
+	Posttime date NOT NULL,
+	ReferenceNumber bigint NOT NULL,
+	UserId bigint NOT NULL,
+	ErrorNumber int NOT NULL,
+	MerchantTransNumber int NOT NULL,
+	PaymentTimeStamp timestamp NOT NULL,
+	SponsorId bigint NOT NULL,
+	IpAdress varchar(100) NOT NULL,
+	CheckSum varbinary(300) NOT NULL,
+	MerchantId bigint NOT NULL,
+	PaymentStatusId int NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.PaymentAttempts ADD CONSTRAINT
+	PK__PaymentA__1D02F9A75267F7D1 PRIMARY KEY CLUSTERED 
+	(
+	PaymentAttemptId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.PaymentAttempts ADD CONSTRAINT
+	fk_PaymentAttempts_Status1 FOREIGN KEY
+	(
+	PaymentStatusId
+	) REFERENCES dbo.PaymentStatus
+	(
+	PaymentStatusId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.PaymentAttempts ADD CONSTRAINT
+	fk_PaymentAttempts_User1 FOREIGN KEY
+	(
+	UserId
+	) REFERENCES dbo.Users
+	(
+	UserId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.PaymentAttempts ADD CONSTRAINT
+	fk_PaymentAttempts_Merchant1 FOREIGN KEY
+	(
+	MerchantId
+	) REFERENCES dbo.Merchants
+	(
+	Merchantid
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.PaymentAttempts SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Transactions
+	(
+	TransactionId bigint NOT NULL IDENTITY (1, 1),
+	PaymentAttemptId bigint NOT NULL,
+	checksum varbinary(300) NOT NULL,
+	computerName varchar(200) NOT NULL,
+	timestamp datetime NOT NULL,
+	TransTypeId int NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Transactions ADD CONSTRAINT
+	PK__Transact__55433A6BD2080A9F PRIMARY KEY CLUSTERED 
+	(
+	TransactionId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Transactions ADD CONSTRAINT
+	fk_Transaction_PaymentAttempt1 FOREIGN KEY
+	(
+	PaymentAttemptId
+	) REFERENCES dbo.PaymentAttempts
+	(
+	PaymentAttemptId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.Transactions ADD CONSTRAINT
+	FK_Transactions_TransType FOREIGN KEY
+	(
+	TransTypeId
+	) REFERENCES dbo.TransType
+	(
+	TransTypeId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.Transactions SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.MediaAuthentication
+	(
+	MediaAuthenticationId bigint NOT NULL IDENTITY (1, 1),
+	Token varbinary(200) NOT NULL,
+	tokenStartDate datetime NOT NULL,
+	tokenEndDate datetime NOT NULL,
+	UserId bigint NOT NULL,
+	SocialMediaId int NOT NULL,
+	ReferenceNumber varbinary(200) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.MediaAuthentication ADD CONSTRAINT
+	PK__MediaAut__2C86F6C7C832351E PRIMARY KEY CLUSTERED 
+	(
+	MediaAuthenticationId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.MediaAuthentication ADD CONSTRAINT
+	fk_Media_MediaId1 FOREIGN KEY
+	(
+	SocialMediaId
+	) REFERENCES dbo.SocialMedia
+	(
+	SocialMediaId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.MediaAuthentication ADD CONSTRAINT
+	fk_Media_UserId1 FOREIGN KEY
+	(
+	UserId
+	) REFERENCES dbo.Users
+	(
+	UserId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.MediaAuthentication SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Locations
+	(
+	LocationId bigint NOT NULL IDENTITY (1, 1),
+	name varchar(128) NOT NULL,
+	city varchar(128) NOT NULL,
+	location geometry NOT NULL
+	)  ON [PRIMARY]
+	 TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE dbo.Locations ADD CONSTRAINT
+	PK__Location__E7FEA497591B7867 PRIMARY KEY CLUSTERED 
+	(
+	LocationId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Locations SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.LocationsxUser
+	(
+	LocationxUserId bigint NOT NULL IDENTITY (1, 1),
+	UserId bigint NOT NULL,
+	LocationId bigint NOT NULL,
+	ts timestamp NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.LocationsxUser ADD CONSTRAINT
+	PK__Location__CC650774DE834DEB PRIMARY KEY CLUSTERED 
+	(
+	LocationxUserId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.LocationsxUser ADD CONSTRAINT
+	fk_LocationxUsers_User1 FOREIGN KEY
+	(
+	UserId
+	) REFERENCES dbo.Users
+	(
+	UserId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.LocationsxUser ADD CONSTRAINT
+	fk_LocationxUsers_Location1 FOREIGN KEY
+	(
+	LocationId
+	) REFERENCES dbo.Locations
+	(
+	LocationId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.LocationsxUser SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Interactions
+	(
+	InteractionId int NOT NULL IDENTITY (1, 1),
+	name varchar(20) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Interactions ADD CONSTRAINT
+	PK__Interact__922C0496A3BE1058 PRIMARY KEY CLUSTERED 
+	(
+	InteractionId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Interactions SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.PostInteractions
+	(
+	PostInteractionId bigint NOT NULL IDENTITY (1, 1),
+	PostId bigint NOT NULL,
+	UserID bigint NOT NULL,
+	InteractionId int NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.PostInteractions ADD CONSTRAINT
+	PK__PostInte__4DBCE0E9B41DC1E0 PRIMARY KEY CLUSTERED 
+	(
+	PostInteractionId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.PostInteractions ADD CONSTRAINT
+	fk_PostInteractions_Interaction1 FOREIGN KEY
+	(
+	InteractionId
+	) REFERENCES dbo.Interactions
+	(
+	InteractionId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.PostInteractions ADD CONSTRAINT
+	fk_PostInteractions_PostId1 FOREIGN KEY
+	(
+	PostId
+	) REFERENCES dbo.Posts
+	(
+	PostId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.PostInteractions ADD CONSTRAINT
+	fk_PostInteractions_UserId1 FOREIGN KEY
+	(
+	UserID
+	) REFERENCES dbo.Users
+	(
+	UserId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.PostInteractions SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Habits
+	(
+	HabitId bigint NOT NULL IDENTITY (1, 1),
+	Tittle nvarchar(128) NOT NULL,
+	name varchar(128) NOT NULL,
+	Description varchar(128) NOT NULL,
+	ratio float(53) NOT NULL,
+	LocationId bigint NOT NULL,
+	PictureURL varchar(200) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Habits ADD CONSTRAINT
+	PK__Habits__C587AF633F04D177 PRIMARY KEY CLUSTERED 
+	(
+	HabitId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Habits SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.HabitCheck
+	(
+	HabitCheckId bigint NOT NULL IDENTITY (1, 1),
+	HabitId bigint NOT NULL,
+	UserId bigint NOT NULL,
+	posttime datetime NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.HabitCheck ADD CONSTRAINT
+	PK_HabitCheck PRIMARY KEY CLUSTERED 
+	(
+	HabitCheckId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.HabitCheck ADD CONSTRAINT
+	FK_HabitCheck_Users FOREIGN KEY
+	(
+	UserId
+	) REFERENCES dbo.Users
+	(
+	UserId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.HabitCheck ADD CONSTRAINT
+	FK_HabitCheck_Habits FOREIGN KEY
+	(
+	HabitId
+	) REFERENCES dbo.Habits
+	(
+	HabitId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.HabitCheck SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.HabitsxPost
+	(
+	HabitsxPostId bigint NOT NULL IDENTITY (1, 1),
+	PostId bigint NOT NULL,
+	HabitId bigint NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.HabitsxPost ADD CONSTRAINT
+	PK__HabitsxP__861F0775B5BC4347 PRIMARY KEY CLUSTERED 
+	(
+	HabitsxPostId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.HabitsxPost ADD CONSTRAINT
+	fk_HabitxPost_Habit1 FOREIGN KEY
+	(
+	HabitId
+	) REFERENCES dbo.Habits
+	(
+	HabitId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.HabitsxPost ADD CONSTRAINT
+	fk_HabitxPost_Post1 FOREIGN KEY
+	(
+	PostId
+	) REFERENCES dbo.Posts
+	(
+	PostId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.HabitsxPost SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Prices
+	(
+	PriceId bigint NOT NULL IDENTITY (1, 1),
+	HabitID bigint NOT NULL,
+	toValue money NOT NULL,
+	fromValue money NOT NULL,
+	timeStamp timestamp NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Prices ADD CONSTRAINT
+	PK__Prices__49575BAFFA66A0FA PRIMARY KEY CLUSTERED 
+	(
+	PriceId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Prices ADD CONSTRAINT
+	fk_Price_Habit1 FOREIGN KEY
+	(
+	HabitID
+	) REFERENCES dbo.Habits
+	(
+	HabitId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.Prices SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.LocationsxHabit
+	(
+	LocationxHabitId bigint NOT NULL IDENTITY (1, 1),
+	HabitId bigint NOT NULL,
+	LocationId bigint NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.LocationsxHabit ADD CONSTRAINT
+	PK__Location__2C0422C3B7F1750D PRIMARY KEY CLUSTERED 
+	(
+	LocationxHabitId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.LocationsxHabit ADD CONSTRAINT
+	fk_LocationxHabit_Habit1 FOREIGN KEY
+	(
+	HabitId
+	) REFERENCES dbo.Habits
+	(
+	HabitId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.LocationsxHabit ADD CONSTRAINT
+	fk_LocationxHabit_Location1 FOREIGN KEY
+	(
+	LocationId
+	) REFERENCES dbo.Locations
+	(
+	LocationId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.LocationsxHabit SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Sponsors
+	(
+	SponsorId bigint NOT NULL IDENTITY (1, 1),
+	UserId bigint NOT NULL,
+	Enabled bit NOT NULL,
+	HabitId bigint NOT NULL,
+	amount money NOT NULL,
+	startDate date NOT NULL,
+	endDate date NOT NULL,
+	posttime datetime NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Sponsors ADD CONSTRAINT
+	PK__Sponsors__3B609ED54E3EF023 PRIMARY KEY CLUSTERED 
+	(
+	SponsorId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Sponsors ADD CONSTRAINT
+	fk_Sponsors_HabitId1 FOREIGN KEY
+	(
+	HabitId
+	) REFERENCES dbo.Habits
+	(
+	HabitId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.Sponsors ADD CONSTRAINT
+	fk_Sponsors_UserId1 FOREIGN KEY
+	(
+	UserId
+	) REFERENCES dbo.Users
+	(
+	UserId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.Sponsors SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.Achievements
+	(
+	AchievementId bigint NOT NULL IDENTITY (1, 1),
+	name varchar(128) NOT NULL,
+	HabitId bigint NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.Achievements ADD CONSTRAINT
+	PK__Achievem__276330C098FDF0E4 PRIMARY KEY CLUSTERED 
+	(
+	AchievementId
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.Achievements SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
+BEGIN TRANSACTION
+GO
+CREATE TABLE dbo.AcomplishedGoals
+	(
+	AcomplishedGoals bigint NOT NULL IDENTITY (1, 1),
+	Quantity int NULL,
+	HabitId bigint NOT NULL,
+	AchievmentId bigint NOT NULL,
+	meassureUnit varchar(20) NOT NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE dbo.AcomplishedGoals ADD CONSTRAINT
+	PK__Acomplis__3D602F193B394342 PRIMARY KEY CLUSTERED 
+	(
+	AcomplishedGoals
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.AcomplishedGoals ADD CONSTRAINT
+	fk_Acomplished_Achiev1 FOREIGN KEY
+	(
+	AchievmentId
+	) REFERENCES dbo.Achievements
+	(
+	AchievementId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.AcomplishedGoals ADD CONSTRAINT
+	fk_Acomplished_Habit1 FOREIGN KEY
+	(
+	HabitId
+	) REFERENCES dbo.Habits
+	(
+	HabitId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+ALTER TABLE dbo.AcomplishedGoals SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
