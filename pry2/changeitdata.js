@@ -5,7 +5,7 @@ exports.d = exports.changeitData = void 0;
 var sql = require('mssql');
 var config = {
     user: 'sa',
-    password: 'macarron',
+    password: '1234',
     host: 'localhost',
     server: 'localhost',
     database: 'changeit',
