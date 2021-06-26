@@ -5,6 +5,8 @@ GO
 IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = 'changeit_SP_VerificarPuntoHabito')
 DROP PROCEDURE dbo.[changeit_SP_VerificarPuntoHabito]
 
+/****** DELETE TABLES IF EXIST ******/
+
 DROP TABLE IF EXISTS [dbo].[Logs];
 DROP TABLE IF EXISTS [dbo].[LogTypes];
 DROP TABLE IF EXISTS [dbo].[AppSource];
@@ -15,8 +17,13 @@ DROP TABLE IF EXISTS [dbo].AcomplishedGoals;
 DROP TABLE IF EXISTS [dbo].Achievements;
 
 DROP TABLE IF EXISTS [dbo].LocationsxHabit;
+DROP TABLE IF EXISTS [dbo].LocationsxUser;
 DROP TABLE IF EXISTS [dbo].Prices;
+DROP TABLE IF EXISTS [dbo].Locations;
+DROP TABLE IF EXISTS [dbo].Cities;
 
+DROP TABLE IF EXISTS [dbo].Sponsors;
+DROP TABLE IF EXISTS [dbo].HabitsxPost;
 DROP TABLE IF EXISTS [dbo].HabitCheck;
 DROP TABLE IF EXISTS [dbo].Habits;
 
@@ -41,6 +48,7 @@ DROP TABLE IF EXISTS [dbo].SocialMedia;
 
 DROP TABLE IF EXISTS [dbo].[Values];
 
+DROP TABLE IF EXISTS [dbo].UTMTagsxTags;
 DROP TABLE IF EXISTS [dbo].TagsxPost;
 
 DROP TABLE IF EXISTS [dbo].Posts;
