@@ -6,18 +6,20 @@ DROP TABLE IF EXISTS [dbo].AcomplishedGoals;
 DROP TABLE IF EXISTS [dbo].Achievements;
 
 DROP TABLE IF EXISTS [dbo].LocationsxHabit;
+DROP TABLE IF EXISTS [dbo].LocationsxUser;
 DROP TABLE IF EXISTS [dbo].Prices;
 DROP TABLE IF EXISTS [dbo].Locations;
 DROP TABLE IF EXISTS [dbo].Cities;
 
 DROP TABLE IF EXISTS [dbo].Sponsors;
+DROP TABLE IF EXISTS [dbo].HabitsxPost;
 DROP TABLE IF EXISTS [dbo].HabitCheck;
 DROP TABLE IF EXISTS [dbo].Habits;
 
 DROP TABLE IF EXISTS [dbo].PostInteractions;
 DROP TABLE IF EXISTS [dbo].Interactions;
 
-DROP TABLE IF EXISTS [dbo].LocationsxUser;
+
 
 DROP TABLE IF EXISTS [dbo].Transactions;
 DROP TABLE IF EXISTS [dbo].TransSubTypes;

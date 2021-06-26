@@ -1,64 +1,211 @@
 USE [changeit]
 GO
-/****** DELETE TABLES IF EXIST -- EXEC sp_fkeys 'Table_Name' ******/
-
-IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = 'changeit_SP_VerificarPuntoHabito')
-DROP PROCEDURE dbo.[changeit_SP_VerificarPuntoHabito]
-
-IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = 'changeit_SP_GeneracionDeUsers')
-DROP PROCEDURE dbo.[changeit_SP_GeneracionDeUsers]
-
-DROP TABLE IF EXISTS [dbo].[Ausar];
-DROP TABLE IF EXISTS [dbo].[Fast_Food_Restaurants2];
-DROP TABLE IF EXISTS [dbo].[Fast_Food_Restaurants];
-
-DROP TABLE IF EXISTS [dbo].[Logs];
-DROP TABLE IF EXISTS [dbo].[LogTypes];
-DROP TABLE IF EXISTS [dbo].[AppSource];
-DROP TABLE IF EXISTS [dbo].[Severities];
-DROP TABLE IF EXISTS [dbo].[EntityTypes];
-
-DROP TABLE IF EXISTS [dbo].AcomplishedGoals;
-DROP TABLE IF EXISTS [dbo].Achievements;
-
-DROP TABLE IF EXISTS [dbo].LocationsxHabit;
-DROP TABLE IF EXISTS [dbo].Prices;
-
-DROP TABLE IF EXISTS [dbo].HabitCheck;
-DROP TABLE IF EXISTS [dbo].Habits;
-
-DROP TABLE IF EXISTS [dbo].Locations;
-DROP TABLE IF EXISTS [dbo].Cities;
-
-DROP TABLE IF EXISTS [dbo].PostInteractions;
-DROP TABLE IF EXISTS [dbo].Interactions;
-
-DROP TABLE IF EXISTS [dbo].LocationsxUser;
-
-DROP TABLE IF EXISTS [dbo].Transactions;
-DROP TABLE IF EXISTS [dbo].TransSubTypes;
-DROP TABLE IF EXISTS [dbo].TransType;
-
-DROP TABLE IF EXISTS [dbo].MediaAuthentication;
-DROP TABLE IF EXISTS [dbo].PaymentAttempts;
-DROP TABLE IF EXISTS [dbo].Merchants;
-DROP TABLE IF EXISTS [dbo].PaymentStatus;
-
-DROP TABLE IF EXISTS [dbo].SocialMedia;
-
-DROP TABLE IF EXISTS [dbo].[Values];
-
-DROP TABLE IF EXISTS [dbo].TagsxPost;
-
-DROP TABLE IF EXISTS [dbo].Posts;
-DROP TABLE IF EXISTS [dbo].PostTypes;
-
-DROP TABLE IF EXISTS [dbo].UTMTags;
-DROP TABLE IF EXISTS [dbo].Users;
+/****** Object:  StoredProcedure [dbo].[changeit_SP_VerificarPuntoHabito]    Script Date: 26/6/2021 02:00:41 ******/
+DROP PROCEDURE [dbo].[changeit_SP_VerificarPuntoHabito]
 GO
-USE [changeit]
+/****** Object:  StoredProcedure [dbo].[changeit_SP_VerificarCostoHabito]    Script Date: 26/6/2021 02:00:41 ******/
+DROP PROCEDURE [dbo].[changeit_SP_VerificarCostoHabito]
 GO
-/****** Object:  Table [dbo].[Achievements]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  StoredProcedure [dbo].[changeit_SP_GeneracionDeUsers]    Script Date: 26/6/2021 02:00:41 ******/
+DROP PROCEDURE [dbo].[changeit_SP_GeneracionDeUsers]
+GO
+ALTER TABLE [dbo].[Values] DROP CONSTRAINT [FK_Values_UTMTags]
+GO
+ALTER TABLE [dbo].[Transactions] DROP CONSTRAINT [FK_Transactions_TransType]
+GO
+ALTER TABLE [dbo].[Transactions] DROP CONSTRAINT [FK_Transactions_TransSubTypes]
+GO
+ALTER TABLE [dbo].[Transactions] DROP CONSTRAINT [FK_Transactions_PaymentAttempts]
+GO
+ALTER TABLE [dbo].[TagsxPost] DROP CONSTRAINT [FK_TagsxPost_UTMTags]
+GO
+ALTER TABLE [dbo].[TagsxPost] DROP CONSTRAINT [fk_TagsxPost_PostId1]
+GO
+ALTER TABLE [dbo].[Prices] DROP CONSTRAINT [FK_Prices_Locations]
+GO
+ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [fk_Post_UserId1]
+GO
+ALTER TABLE [dbo].[Posts] DROP CONSTRAINT [fk_Post_PostypeId1]
+GO
+ALTER TABLE [dbo].[PostInteractions] DROP CONSTRAINT [fk_PostInteractions_UserId1]
+GO
+ALTER TABLE [dbo].[PostInteractions] DROP CONSTRAINT [fk_PostInteractions_PostId1]
+GO
+ALTER TABLE [dbo].[PostInteractions] DROP CONSTRAINT [fk_PostInteractions_Interaction1]
+GO
+ALTER TABLE [dbo].[PaymentAttempts] DROP CONSTRAINT [fk_PaymentAttempts_User1]
+GO
+ALTER TABLE [dbo].[PaymentAttempts] DROP CONSTRAINT [fk_PaymentAttempts_Status1]
+GO
+ALTER TABLE [dbo].[PaymentAttempts] DROP CONSTRAINT [fk_PaymentAttempts_Merchant1]
+GO
+ALTER TABLE [dbo].[MediaAuthentication] DROP CONSTRAINT [fk_Media_UserId1]
+GO
+ALTER TABLE [dbo].[MediaAuthentication] DROP CONSTRAINT [fk_Media_MediaId1]
+GO
+ALTER TABLE [dbo].[Logs] DROP CONSTRAINT [FK_Logs_Severities]
+GO
+ALTER TABLE [dbo].[Logs] DROP CONSTRAINT [FK_Logs_LogTypes]
+GO
+ALTER TABLE [dbo].[Logs] DROP CONSTRAINT [FK_Logs_EntityTypes]
+GO
+ALTER TABLE [dbo].[Logs] DROP CONSTRAINT [FK_Logs_AppSource]
+GO
+ALTER TABLE [dbo].[LocationsxUser] DROP CONSTRAINT [fk_LocationxUsers_User1]
+GO
+ALTER TABLE [dbo].[LocationsxHabit] DROP CONSTRAINT [fk_LocationxHabit_Location1]
+GO
+ALTER TABLE [dbo].[LocationsxHabit] DROP CONSTRAINT [FK_LocationsxHabit_Habits1]
+GO
+ALTER TABLE [dbo].[Locations] DROP CONSTRAINT [FK_Locations_Cities]
+GO
+ALTER TABLE [dbo].[Habits] DROP CONSTRAINT [FK_Habits_Users]
+GO
+ALTER TABLE [dbo].[HabitCheck] DROP CONSTRAINT [FK_HabitCheck_Users]
+GO
+ALTER TABLE [dbo].[HabitCheck] DROP CONSTRAINT [FK_HabitCheck_Locations]
+GO
+ALTER TABLE [dbo].[HabitCheck] DROP CONSTRAINT [FK_HabitCheck_Habits]
+GO
+ALTER TABLE [dbo].[AcomplishedGoals] DROP CONSTRAINT [fk_Acomplished_Habit1]
+GO
+ALTER TABLE [dbo].[AcomplishedGoals] DROP CONSTRAINT [fk_Acomplished_Achiev1]
+GO
+ALTER TABLE [dbo].[flyway_schema_history] DROP CONSTRAINT [DF__flyway_sc__insta__2E11BAA1]
+GO
+/****** Object:  Table [dbo].[Values]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Values]') AND type in (N'U'))
+DROP TABLE [dbo].[Values]
+GO
+/****** Object:  Table [dbo].[UTMTags]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UTMTags]') AND type in (N'U'))
+DROP TABLE [dbo].[UTMTags]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Users]') AND type in (N'U'))
+DROP TABLE [dbo].[Users]
+GO
+/****** Object:  Table [dbo].[TransType]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TransType]') AND type in (N'U'))
+DROP TABLE [dbo].[TransType]
+GO
+/****** Object:  Table [dbo].[TransSubTypes]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TransSubTypes]') AND type in (N'U'))
+DROP TABLE [dbo].[TransSubTypes]
+GO
+/****** Object:  Table [dbo].[Transactions]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Transactions]') AND type in (N'U'))
+DROP TABLE [dbo].[Transactions]
+GO
+/****** Object:  Table [dbo].[TagsxPost]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[TagsxPost]') AND type in (N'U'))
+DROP TABLE [dbo].[TagsxPost]
+GO
+/****** Object:  Table [dbo].[SocialMedia]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SocialMedia]') AND type in (N'U'))
+DROP TABLE [dbo].[SocialMedia]
+GO
+/****** Object:  Table [dbo].[Severities]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Severities]') AND type in (N'U'))
+DROP TABLE [dbo].[Severities]
+GO
+/****** Object:  Table [dbo].[Prices]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Prices]') AND type in (N'U'))
+DROP TABLE [dbo].[Prices]
+GO
+/****** Object:  Table [dbo].[PostTypes]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PostTypes]') AND type in (N'U'))
+DROP TABLE [dbo].[PostTypes]
+GO
+/****** Object:  Table [dbo].[Posts]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Posts]') AND type in (N'U'))
+DROP TABLE [dbo].[Posts]
+GO
+/****** Object:  Table [dbo].[PostInteractions]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PostInteractions]') AND type in (N'U'))
+DROP TABLE [dbo].[PostInteractions]
+GO
+/****** Object:  Table [dbo].[PaymentStatus]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PaymentStatus]') AND type in (N'U'))
+DROP TABLE [dbo].[PaymentStatus]
+GO
+/****** Object:  Table [dbo].[PaymentAttempts]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PaymentAttempts]') AND type in (N'U'))
+DROP TABLE [dbo].[PaymentAttempts]
+GO
+/****** Object:  Table [dbo].[Merchants]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Merchants]') AND type in (N'U'))
+DROP TABLE [dbo].[Merchants]
+GO
+/****** Object:  Table [dbo].[MediaAuthentication]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MediaAuthentication]') AND type in (N'U'))
+DROP TABLE [dbo].[MediaAuthentication]
+GO
+/****** Object:  Table [dbo].[LogTypes]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LogTypes]') AND type in (N'U'))
+DROP TABLE [dbo].[LogTypes]
+GO
+/****** Object:  Table [dbo].[Logs]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Logs]') AND type in (N'U'))
+DROP TABLE [dbo].[Logs]
+GO
+/****** Object:  Table [dbo].[LocationsxUser]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LocationsxUser]') AND type in (N'U'))
+DROP TABLE [dbo].[LocationsxUser]
+GO
+/****** Object:  Table [dbo].[LocationsxHabit]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[LocationsxHabit]') AND type in (N'U'))
+DROP TABLE [dbo].[LocationsxHabit]
+GO
+/****** Object:  Table [dbo].[Locations]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Locations]') AND type in (N'U'))
+DROP TABLE [dbo].[Locations]
+GO
+/****** Object:  Table [dbo].[Interactions]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Interactions]') AND type in (N'U'))
+DROP TABLE [dbo].[Interactions]
+GO
+/****** Object:  Table [dbo].[Habits]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Habits]') AND type in (N'U'))
+DROP TABLE [dbo].[Habits]
+GO
+/****** Object:  Table [dbo].[HabitCheck]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[HabitCheck]') AND type in (N'U'))
+DROP TABLE [dbo].[HabitCheck]
+GO
+/****** Object:  Table [dbo].[flyway_schema_history]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[flyway_schema_history]') AND type in (N'U'))
+DROP TABLE [dbo].[flyway_schema_history]
+GO
+/****** Object:  Table [dbo].[Fast_Food_Restaurants2]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Fast_Food_Restaurants2]') AND type in (N'U'))
+DROP TABLE [dbo].[Fast_Food_Restaurants2]
+GO
+/****** Object:  Table [dbo].[EntityTypes]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[EntityTypes]') AND type in (N'U'))
+DROP TABLE [dbo].[EntityTypes]
+GO
+/****** Object:  Table [dbo].[Cities]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Cities]') AND type in (N'U'))
+DROP TABLE [dbo].[Cities]
+GO
+/****** Object:  Table [dbo].[Ausar]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Ausar]') AND type in (N'U'))
+DROP TABLE [dbo].[Ausar]
+GO
+/****** Object:  Table [dbo].[AppSource]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AppSource]') AND type in (N'U'))
+DROP TABLE [dbo].[AppSource]
+GO
+/****** Object:  Table [dbo].[AcomplishedGoals]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[AcomplishedGoals]') AND type in (N'U'))
+DROP TABLE [dbo].[AcomplishedGoals]
+GO
+/****** Object:  Table [dbo].[Achievements]    Script Date: 26/6/2021 02:00:41 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Achievements]') AND type in (N'U'))
+DROP TABLE [dbo].[Achievements]
+GO
+/****** Object:  Table [dbo].[Achievements]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -72,7 +219,7 @@ CREATE TABLE [dbo].[Achievements](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AcomplishedGoals]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[AcomplishedGoals]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -89,7 +236,7 @@ CREATE TABLE [dbo].[AcomplishedGoals](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[AppSource]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[AppSource]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -104,7 +251,7 @@ CREATE TABLE [dbo].[AppSource](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Ausar]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Ausar]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -118,13 +265,13 @@ CREATE TABLE [dbo].[Ausar](
 	[longitude] [varchar](50) NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Cities]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Cities]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Cities](
-	[CityId] [int] NOT NULL,
+	[CityId] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](255) NOT NULL,
  CONSTRAINT [PK_Cities] PRIMARY KEY CLUSTERED 
 (
@@ -136,7 +283,7 @@ CREATE TABLE [dbo].[Cities](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[EntityTypes]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[EntityTypes]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -151,7 +298,7 @@ CREATE TABLE [dbo].[EntityTypes](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Fast_Food_Restaurants2]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Fast_Food_Restaurants2]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -174,7 +321,29 @@ CREATE TABLE [dbo].[Fast_Food_Restaurants2](
 	[websites] [varchar](max) NULL
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[HabitCheck]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[flyway_schema_history]    Script Date: 26/6/2021 02:00:41 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[flyway_schema_history](
+	[installed_rank] [int] NOT NULL,
+	[version] [nvarchar](50) NULL,
+	[description] [nvarchar](200) NULL,
+	[type] [nvarchar](20) NOT NULL,
+	[script] [nvarchar](1000) NOT NULL,
+	[checksum] [int] NULL,
+	[installed_by] [nvarchar](100) NOT NULL,
+	[installed_on] [datetime] NOT NULL,
+	[execution_time] [int] NOT NULL,
+	[success] [bit] NOT NULL,
+ CONSTRAINT [flyway_schema_history_pk] PRIMARY KEY CLUSTERED 
+(
+	[installed_rank] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[HabitCheck]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -195,7 +364,7 @@ CREATE TABLE [dbo].[HabitCheck](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Habits]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Habits]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -218,7 +387,7 @@ CREATE TABLE [dbo].[Habits](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Interactions]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Interactions]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -232,27 +401,22 @@ CREATE TABLE [dbo].[Interactions](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Locations]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Locations]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[Locations](
 	[LocationId] [bigint] IDENTITY(1,1) NOT NULL,
-	[Name] [varchar](128) NOT NULL,
 	[CityId] [int] NOT NULL,
 	[Location] [geography] NOT NULL,
  CONSTRAINT [PK__Location__E7FEA497591B7867] PRIMARY KEY CLUSTERED 
 (
 	[LocationId] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
- CONSTRAINT [IX_Locations] UNIQUE NONCLUSTERED 
-(
-	[Name] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LocationsxHabit]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[LocationsxHabit]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -276,7 +440,7 @@ CREATE TABLE [dbo].[LocationsxHabit](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LocationsxUser]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[LocationsxUser]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -292,7 +456,7 @@ CREATE TABLE [dbo].[LocationsxUser](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Logs]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Logs]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -320,7 +484,7 @@ CREATE TABLE [dbo].[Logs](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[LogTypes]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[LogTypes]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -335,7 +499,7 @@ CREATE TABLE [dbo].[LogTypes](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[MediaAuthentication]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[MediaAuthentication]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -354,7 +518,7 @@ CREATE TABLE [dbo].[MediaAuthentication](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Merchants]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Merchants]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -375,7 +539,7 @@ CREATE TABLE [dbo].[Merchants](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PaymentAttempts]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[PaymentAttempts]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -401,7 +565,7 @@ CREATE TABLE [dbo].[PaymentAttempts](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PaymentStatus]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[PaymentStatus]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -415,7 +579,7 @@ CREATE TABLE [dbo].[PaymentStatus](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PostInteractions]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[PostInteractions]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -439,7 +603,7 @@ CREATE TABLE [dbo].[PostInteractions](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Posts]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Posts]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -464,7 +628,7 @@ CREATE TABLE [dbo].[Posts](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PostTypes]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[PostTypes]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -478,7 +642,7 @@ CREATE TABLE [dbo].[PostTypes](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Prices]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Prices]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -495,7 +659,7 @@ CREATE TABLE [dbo].[Prices](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Severities]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Severities]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -510,7 +674,7 @@ CREATE TABLE [dbo].[Severities](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[SocialMedia]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[SocialMedia]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -525,7 +689,7 @@ CREATE TABLE [dbo].[SocialMedia](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TagsxPost]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[TagsxPost]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -540,7 +704,7 @@ CREATE TABLE [dbo].[TagsxPost](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Transactions]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Transactions]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -564,7 +728,7 @@ CREATE TABLE [dbo].[Transactions](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TransSubTypes]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[TransSubTypes]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -582,7 +746,7 @@ CREATE TABLE [dbo].[TransSubTypes](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TransType]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[TransType]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -600,7 +764,7 @@ CREATE TABLE [dbo].[TransType](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -623,7 +787,7 @@ CREATE TABLE [dbo].[Users](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UTMTags]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[UTMTags]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -637,7 +801,7 @@ CREATE TABLE [dbo].[UTMTags](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Values]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  Table [dbo].[Values]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -651,6 +815,8 @@ CREATE TABLE [dbo].[Values](
 	[ValueId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[flyway_schema_history] ADD  DEFAULT (getdate()) FOR [installed_on]
 GO
 ALTER TABLE [dbo].[AcomplishedGoals]  WITH CHECK ADD  CONSTRAINT [fk_Acomplished_Achiev1] FOREIGN KEY([AchievmentId])
 REFERENCES [dbo].[Achievements] ([AchievementId])
@@ -807,7 +973,7 @@ REFERENCES [dbo].[UTMTags] ([UTMTagId])
 GO
 ALTER TABLE [dbo].[Values] CHECK CONSTRAINT [FK_Values_UTMTags]
 GO
-/****** Object:  StoredProcedure [dbo].[changeit_SP_GeneracionDeUsers]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  StoredProcedure [dbo].[changeit_SP_GeneracionDeUsers]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -882,7 +1048,115 @@ END
 
 
 GO
-/****** Object:  StoredProcedure [dbo].[changeit_SP_VerificarPuntoHabito]    Script Date: 24/6/2021 21:32:11 ******/
+/****** Object:  StoredProcedure [dbo].[changeit_SP_VerificarCostoHabito]    Script Date: 26/6/2021 02:00:41 ******/
+SET ANSI_NULLS OFF
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[changeit_SP_VerificarCostoHabito]
+	@CenterPoint GEOGRAPHY,
+	@Ratio FLOAT
+AS 
+BEGIN	
+	SET NOCOUNT ON
+	
+	DECLARE @ErrorNumber INT, @ErrorSeverity INT, @ErrorState INT, @CustomError INT
+	DECLARE @Message VARCHAR(200)
+
+	DECLARE @locationId BIGINT
+	DECLARE @locationId2 BIGINT
+	DECLARE @PriceId BIGINT
+	DECLARE @Point GEOGRAPHY
+	DECLARE @Enable BIT
+	DECLARE @Amount MONEY
+	DECLARE @TotalAmount MONEY
+	DECLARE @QuantHab BIGINT
+	DECLARE @AuxQuantHab BIGINT
+	DECLARE @inside INT
+	DECLARE @Population FLOAT
+	DECLARE @PasValue MONEY
+	DECLARE habitxlocaCursor CURSOR FOR SELECT LocationId,Enabled,Amount FROM dbo.LocationsxHabit
+    DECLARE habitCheckCursor CURSOR FOR SELECT LocationId FROM dbo.HabitCheck
+
+	SET @QuantHab = 0
+	SET @TotalAmount = 1
+	OPEN habitxlocaCursor
+		FETCH NEXT FROM habitxlocaCursor INTO @locationId,@Enable,@Amount 
+		WHILE @@FETCH_STATUS = 0
+		BEGIN		
+			IF @Enable = 1 
+				SET @Point = (SELECT Location FROM Locations WHERE @locationId=LocationId )
+				EXEC @inside = dbo.changeit_SP_VerificarPuntoHabito @Point,@Ratio,@CenterPoint
+				IF @inside = 1
+					SET @QuantHab = @QuantHab + 1
+					SET @TotalAmount = @TotalAmount + @Amount
+			FETCH NEXT FROM habitxlocaCursor INTO @locationId,@Enable,@Amount
+		END
+	CLOSE habitxlocaCursor
+	DEALLOCATE habitxlocaCursor
+
+	SET @Population = 1
+
+	OPEN habitCheckCursor
+		FETCH NEXT FROM habitCheckCursor INTO @locationId
+		WHILE @@FETCH_STATUS = 0
+		BEGIN		
+			SET @Point = (SELECT Location FROM Locations WHERE @locationId=LocationId )
+			EXEC @inside = dbo.changeit_SP_VerificarPuntoHabito @Point,@Ratio,@CenterPoint
+			IF @inside = 1
+				SET @Population = @Population + 1
+			FETCH NEXT FROM habitCheckCursor INTO @locationId
+		END
+	CLOSE habitCheckCursor
+	DEALLOCATE habitCheckCursor
+
+	SET @TotalAmount = ((@TotalAmount/(@QuantHab+1))*(@Population/10))+10+(@Ratio/10)
+
+	BEGIN TRY
+		SET @CustomError = 2001
+
+		SET @locationId = (SELECT LocationId FROM Locations WHERE Location.STDistance (@CenterPoint) = 0 )
+
+		IF @locationId = NULL
+			BEGIN
+				IF IDENT_CURRENT('Cities') = NULL
+					INSERT INTO [dbo].[Cities] VALUES ('El más alla')
+				INSERT INTO Locations VALUES (1,@CenterPoint)
+				SET @locationId2 = IDENT_CURRENT('Locations')
+				INSERT INTO Prices VALUES (@locationId2,@TotalAmount,0, GETDATE()) 
+			END
+		ELSE
+			BEGIN
+				SET @PriceId = (SELECT PriceId FROM Prices WHERE LocationId = (@locationId))
+				IF @PriceId = NULL
+					BEGIN
+						INSERT INTO Prices VALUES (@locationId,@TotalAmount,0, GETDATE()) 
+					END
+				ELSE
+					BEGIN
+						SET @PasValue = (SELECT ToValue FROM Prices WHERE PriceId = @PriceId)
+						UPDATE Prices SET ToValue = @TotalAmount, FromValue = @PasValue , PostTime = GETDATE() WHERE PriceId = @PriceId
+					END
+			END	
+
+		RETURN @TotalAmount
+
+	END TRY
+	BEGIN CATCH
+		SET @ErrorNumber = ERROR_NUMBER()
+		SET @ErrorSeverity = ERROR_SEVERITY()
+		SET @ErrorState = ERROR_STATE()
+		SET @Message = ERROR_MESSAGE()
+		
+		RAISERROR('%s - Error Number: %i', 
+			@ErrorSeverity, @ErrorState, @Message, @CustomError)
+	END CATCH	
+END
+
+declare @location geography = geography::Point(10.660108958171534, 107.77588345061677, 4326)
+INSERT INTO Locations VALUES (1,@location)
+GO
+/****** Object:  StoredProcedure [dbo].[changeit_SP_VerificarPuntoHabito]    Script Date: 26/6/2021 02:00:41 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -915,5 +1189,3 @@ BEGIN
 	END CATCH	
 END
 GO
-
-
