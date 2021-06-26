@@ -1,3 +1,61 @@
+USE [changeit]
+GO
+/****** DELETE TABLES IF EXIST -- EXEC sp_fkeys 'Table_Name' ******/
+
+IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = 'changeit_SP_VerificarPuntoHabito')
+DROP PROCEDURE dbo.[changeit_SP_VerificarPuntoHabito]
+
+IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = 'changeit_SP_GeneracionDeUsers')
+DROP PROCEDURE dbo.[changeit_SP_GeneracionDeUsers]
+
+DROP TABLE IF EXISTS [dbo].[Ausar];
+DROP TABLE IF EXISTS [dbo].[Fast_Food_Restaurants2];
+
+DROP TABLE IF EXISTS [dbo].[Logs];
+DROP TABLE IF EXISTS [dbo].[LogTypes];
+DROP TABLE IF EXISTS [dbo].[AppSource];
+DROP TABLE IF EXISTS [dbo].[Severities];
+DROP TABLE IF EXISTS [dbo].[EntityTypes];
+
+DROP TABLE IF EXISTS [dbo].AcomplishedGoals;
+DROP TABLE IF EXISTS [dbo].Achievements;
+
+DROP TABLE IF EXISTS [dbo].LocationsxHabit;
+DROP TABLE IF EXISTS [dbo].Prices;
+
+DROP TABLE IF EXISTS [dbo].HabitCheck;
+DROP TABLE IF EXISTS [dbo].Habits;
+
+DROP TABLE IF EXISTS [dbo].Locations;
+DROP TABLE IF EXISTS [dbo].Cities;
+
+DROP TABLE IF EXISTS [dbo].PostInteractions;
+DROP TABLE IF EXISTS [dbo].Interactions;
+
+DROP TABLE IF EXISTS [dbo].LocationsxUser;
+
+DROP TABLE IF EXISTS [dbo].Transactions;
+DROP TABLE IF EXISTS [dbo].TransSubTypes;
+DROP TABLE IF EXISTS [dbo].TransType;
+
+DROP TABLE IF EXISTS [dbo].MediaAuthentication;
+DROP TABLE IF EXISTS [dbo].PaymentAttempts;
+DROP TABLE IF EXISTS [dbo].Merchants;
+DROP TABLE IF EXISTS [dbo].PaymentStatus;
+
+DROP TABLE IF EXISTS [dbo].SocialMedia;
+
+DROP TABLE IF EXISTS [dbo].[Values];
+
+DROP TABLE IF EXISTS [dbo].TagsxPost;
+
+DROP TABLE IF EXISTS [dbo].Posts;
+DROP TABLE IF EXISTS [dbo].PostTypes;
+
+DROP TABLE IF EXISTS [dbo].UTMTags;
+DROP TABLE IF EXISTS [dbo].Users;
+
+
 /* To prevent any potential data loss issues, you should review this script in detail before running it outside the context of the database designer.*/
 BEGIN TRANSACTION
 SET QUOTED_IDENTIFIER ON

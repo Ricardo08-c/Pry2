@@ -86,7 +86,10 @@ BEGIN
 			BEGIN
 				IF IDENT_CURRENT('Cities') = NULL
 					INSERT INTO [dbo].[Cities] VALUES ('El más alla')
-				INSERT INTO Locations VALUES (1,@CenterPoint)
+				IF IDENT_CURRENT('Locations') <> NULL
+					INSERT INTO Locations VALUES (CONCAT('PuntoPrecio',IDENT_CURRENT('Locations')),1,@CenterPoint)
+				IF IDENT_CURRENT('Locations') = NULL
+					INSERT INTO Locations VALUES (CONCAT('PuntoPrecio',0),1,@CenterPoint)
 				SET @locationId2 = IDENT_CURRENT('Locations')
 				INSERT INTO Prices VALUES (@locationId2,@TotalAmount,0, GETDATE()) 
 			END
@@ -117,4 +120,3 @@ BEGIN
 			@ErrorSeverity, @ErrorState, @Message, @CustomError)
 	END CATCH	
 END
-

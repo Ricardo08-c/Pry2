@@ -10,6 +10,7 @@ DROP PROCEDURE dbo.[changeit_SP_GeneracionDeUsers]
 
 DROP TABLE IF EXISTS [dbo].[Ausar];
 DROP TABLE IF EXISTS [dbo].[Fast_Food_Restaurants2];
+DROP TABLE IF EXISTS [dbo].[Fast_Food_Restaurants];
 
 DROP TABLE IF EXISTS [dbo].[Logs];
 DROP TABLE IF EXISTS [dbo].[LogTypes];
