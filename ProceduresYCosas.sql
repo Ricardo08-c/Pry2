@@ -1,36 +1,3 @@
-create procedure fillUsers
-@n bigint
-as 
-begin 
-declare @i bigint = 0;
-DECLARE @userNames TABLE (id INT, name varchar(128), apellido varchar(128))
-	insert into @userNames values (1,'Roberto','Juarez'),(2,'Gail','Jordan'),
-	(3,'Marta','Soto'),(4,'Juan','Perez'),(5,'Pedro','Coto'),(6,'Alicia','Vega'),(7,'Leo','Farinha'),(8,'Ricardo','Araya')
-
-	while (@i < @n)
-	begin
-	declare @nombreid smallint
-	set @nombreid= cast(rand()*8+1 as int);
-
-	declare @nombre varchar(128)
-	select @nombre = name from @userNames where id = @nombreid;
-	set @nombreid= cast(rand()*8+1 as int);
-	declare @apellido varchar(128)
-	select @apellido = apellido from @userNames where id = @nombreid;
-
-	Declare @DateStart	Date = '1990-01-01'
-			,@DateEnd	Date = '2002-01-01'
-	declare @date date 
-	set @date = DateAdd(Day, Rand() * DateDiff(Day, @DateStart, @DateEnd), @DateStart)
-	declare @mail varchar(200)
-	set @mail = concat(@nombre,@apellido,CONVERT(varchar,@i),'@gmail.com')
-	set @nombre =  concat(@nombre,convert(varchar(20),@i));
-	insert into Users values (@nombre, 0, @apellido,@mail, convert(varbinary,CHECKSUM(concat(@nombre,@apellido,@i))),@date)
-	set @i = @i +1
-	end 
-end;
-exec fillUsers 100000
-
 create procedure registerHabits 
 @n bigint
 as
