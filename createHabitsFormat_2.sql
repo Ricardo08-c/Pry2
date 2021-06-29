@@ -23,22 +23,7 @@ insert into @habits values (1,'No comprar botellas plasticas','Disminucion de pl
 	(3,'Sin miedo a reciclar','Recicla y venceras'
 	,'Este habito consiste reciclar lo ultimo que consumio','http:googleDrive/Reicle.png'),
 	(4,'A la playa','La playa es vida'
-	,'Este habito consiste recoger unas cuantas basuras de su playa mas cercana','http:googleDrive/playa.png'),
-	(5,'Cuidemos el agua','El agua es vida'
-	,'No hay razón para dejarla correr mientras te cepillas los dientes, lavas las verduras o limpias','http:googleDrive/agua.png'),
-	(6,'Cuidemos la electiricidad','La electricidad es cara'
-	,'Desconecta los aparatos electrónicos cuando no los estás usando','http:googleDrive/ApagarAparatos.png'),
-	(7,'Camina más','No uses tanto tu auto'
-	,'Reduce la contaminación y te hace muy bien a tu salud','http:googleDrive/Caminemos.png'),
-	(8,'Nada de latas','Deja de comer alimentos enlatados'
-	,'No son buenos para la salud y además alientan la producción de latas de aluminio','http:googleDrive/MenosAluminio.png'),
-	(9,'Ayudemos a la tierra','Recoge una basura del suelo'
-	,'Recoge la basura más cercana a ti para mejorar el mundo','http:googleDrive/MejorandoElMundo.png'),
-	(10,'No a los aerosoles','Los aerosoles contaminan nuestra atmosfera'
-	,'No hay razón para usarlos, usemos otros tipos de productos para dejar de dañar nuestra atmosfera','http:googleDrive/AyudaAtmosfera.png')
-
-
-
+	,'Este habito consiste recoger unas cuantas basuras de su playa mas cercana','http:googleDrive/playa.png')
 declare @checkinQuantity int
 declare @idgroup varchar(10)
 declare @idCount bigint
@@ -62,10 +47,6 @@ Declare @DateEnd	Date
 declare @habit bigint
 declare @randUser bigint
 declare @user bigint
-declare @Quantity INT  
-declare  @AchievmentId BIGINT
-declare  @meassureUnit VARCHAR(20)
-
 
 while @i < 1000
 begin
@@ -127,7 +108,7 @@ begin
 	
 		-- ingreso a habits
 
-		set @rand = cast(rand()*10+1 as int)
+		set @rand = cast(rand()*4+1 as int)
 
 		Insert into Habits select 
 		concat(title,convert(varchar(20),@i)),
@@ -139,55 +120,6 @@ begin
 		from @habits where id = @rand;
 	
 		set @habitid = IDENT_CURRENT('Habits')
-
-	    IF @rand = 1 OR @rand = 2 OR @rand = 3
-		BEGIN
-			SET @Quantity = CAST(RAND()*(100-10)+10 AS INT)
-			SET @AchievmentId = 1
-			SET @meassureUnit = 'Gramos'
-		END
-		IF @rand = 4 OR @rand = 9
-		BEGIN
-			SET @Quantity = CAST(RAND()*(100-10)+10 AS INT)
-			SET @AchievmentId = 2
-			SET @meassureUnit = 'Gramos'
-		END
-		IF @rand = 5
-		BEGIN
-			SET @Quantity = CAST(RAND()*(1000-100)+100 AS INT)
-			SET @AchievmentId = 3
-			SET @meassureUnit = 'Mililitros'
-		END
-		IF @rand = 6
-		BEGIN
-			SET @Quantity = CAST(RAND()*(1000-100)+100 AS INT)
-			SET @AchievmentId = 4
-			SET @meassureUnit = 'Watts'
-		END
-		IF @rand = 7
-		BEGIN
-			SET @Quantity = CAST(RAND()*(100-10)+10 AS INT)
-			SET @AchievmentId = 5
-			SET @meassureUnit = 'Centímetros Cúbicos'
-		END
-		IF @rand = 8
-		BEGIN
-			SET @Quantity = CAST(RAND()*(1000-100)+100 AS INT)
-			SET @AchievmentId = 6
-			SET @meassureUnit = 'Gramos'
-		END
-		IF @rand = 10
-		BEGIN
-			SET @Quantity = CAST(RAND()*(1000-100)+100 AS INT)
-			SET @AchievmentId = 7
-			SET @meassureUnit = 'Centímetros Cúbicos'
-		END
-
-		INSERT INTO [dbo].[AcomplishedGoals] VALUES
-		( @Quantity, @HabitId, @AchievmentId, @meassureUnit )
-
-
-
 		exec [dbo].checkinReference @habitid,@checkinQuantity,@locationHabit;
 
 		-- ingreso a locationxHabits
