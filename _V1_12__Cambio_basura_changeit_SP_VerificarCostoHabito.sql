@@ -75,7 +75,7 @@ BEGIN
 	CLOSE habitCheckCursor
 	DEALLOCATE habitCheckCursor
 
-	SET @TotalAmount = ((@TotalAmount/(@QuantHab+1))*(@Population/10))+10+(@Ratio/10)
+	SET @TotalAmount = ((@TotalAmount/(@QuantHab+1))*(@Population/100))+10+(@Ratio/100)
 
 	BEGIN TRY
 		SET @CustomError = 2001
@@ -106,7 +106,8 @@ BEGIN
 						UPDATE Prices SET ToValue = @TotalAmount, FromValue = @PasValue , PostTime = GETDATE() WHERE PriceId = @PriceId
 					END
 			END	
-
+		
+		COMMIT
 		RETURN @TotalAmount
 
 	END TRY
