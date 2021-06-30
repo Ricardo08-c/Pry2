@@ -118,7 +118,7 @@ begin
 		if not exists(select Locations.Location.Lat,Locations.Location.Long from Locations where Locations.Location.Lat = @lati and Locations.Location.Long = @longi)
 		begin
 			insert into Locations 
-			select top 1 CONCAT(name,@cityid,@Ausarid), @cityid,geography::Point(latitude, longitude, 4326) from Ausar where Ausarid = @Ausarid;
+			select top 1 CONCAT(name,CAST(RAND()*(99999999-10000000)+10000000 AS BIGINT)), @cityid,geography::Point(latitude, longitude, 4326) from Ausar where Ausarid = @Ausarid;
 			set @locationHabit =  IDENT_CURRENT('Locations')
 		end
 	
@@ -177,7 +177,7 @@ begin
 			SET @meassureUnit = 'Gramos'
 		END
 		IF @rand = 10
-		BEGIN
+		BEGIN	
 			SET @Quantity = CAST(RAND()*(1000-100)+100 AS INT)
 			SET @AchievmentId = 7
 			SET @meassureUnit = 'Centímetros Cúbicos'
@@ -266,23 +266,30 @@ end
 
 
 
-SELECT * FROM [dbo].[HabitCheck]
-
-SELECT * FROM Habits
-SELECT * FROM [dbo].[LocationsxHabit]
-
-SELECT * FROM Achievements
+SELECT * FROM [dbo].[Achievements]
 SELECT * FROM [dbo].[AcomplishedGoals]
+SELECT * FROM [dbo].[Cities]
+SELECT * FROM [dbo].[HabitCheck]
+SELECT * FROM [dbo].[Habits]
+SELECT * FROM [dbo].[Interactions]
+SELECT * FROM [dbo].[Locations]
+SELECT * FROM [dbo].[LocationsxHabit]
+SELECT * FROM [dbo].[LocationsxUser]
+SELECT * FROM [dbo].[MediaAuthentication]
+SELECT * FROM [dbo].[Merchants]
+SELECT * FROM [dbo].[PaymentAttempts]
+SELECT * FROM [dbo].[PaymentStatus]
+SELECT * FROM [dbo].[PostInteractions]
+SELECT * FROM [dbo].[Posts]
+SELECT * FROM [dbo].[PostTypes]
+SELECT * FROM [dbo].[Prices]
+SELECT * FROM [dbo].[SocialMedia]
+SELECT * FROM [dbo].[TagsxPost]
+SELECT * FROM [dbo].[Transactions]
+SELECT * FROM [dbo].[TransSubTypes]
+SELECT * FROM [dbo].[TransType]
+SELECT * FROM [dbo].[Users]
+SELECT * FROM [dbo].[UTMTags]
+SELECT * FROM [dbo].[Values]
 
 
-delete from HabitCheck
-delete from LocationsxHabit
-delete from Locations
-delete from Habits
-delete from checkinValues
-DBCC CHECKIDENT ('HabitCheck', RESEED, 0)
-
-DBCC CHECKIDENT ('checkinValues', RESEED, 0)
-DBCC CHECKIDENT ('Locations', RESEED, 0)
-DBCC CHECKIDENT ('Habits', RESEED, 0)
-DBCC CHECKIDENT ('LocationsxHabit', RESEED, 0)
