@@ -26,6 +26,7 @@ BEGIN
 	DECLARE @Random INT
 
 	SELECT @name = name, @city = CityId,@latitudeReference = Locations.Location.Lat, @longitudeReference=Locations.Location.Long FROM Locations WHERE LocationId = @locationid
+	SET @name = SUBSTRING(@name ,0,CHARINDEX(left(right(@name , 8),1),@name ))
 	WHILE @i < @n 
 		BEGIN
 		DECLARE @puntoRand FLOAT =  0.0001*(RAND()*100+10)*CAST(RAND()*9 AS INT)
@@ -36,7 +37,7 @@ BEGIN
 		SELECT @locationidpoint = Locations.LocationId FROM Locations WHERE Locations.Location.Lat = @lati AND Locations.Location.Long = @longi
 		IF not exists(SELECT Locations.Location.Lat,Locations.Location.Long FROM Locations WHERE Locations.Location.Lat = @lati AND Locations.Location.Long = @longi)
 		BEGIN 
-			INSERT INTO Locations VALUES (@name,@city,@locationPoint)
+			INSERT INTO Locations VALUES (CONCAT(@name,CAST(RAND()*(99999999-10000000)+10000000 AS BIGINT)),@city,@locationPoint)
 			SET @locationidpoint =  IDENT_CURRENT('Locations')
 		END
 

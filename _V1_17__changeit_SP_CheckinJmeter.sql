@@ -36,7 +36,7 @@ BEGIN
 	DECLARE @Seconds INT
 	DECLARE @Random INT
 	DECLARE @locationidpoint BIGINT
-
+	DECLARE @ResName VARCHAR(128)
 
 	DECLARE @FromDate2  DATETIME
 	DECLARE @ToDate2  DATETIME
@@ -46,6 +46,7 @@ BEGIN
 
 	DECLARE @GruposZonas AS TABLE
 	(			 GrupoId INT,
+				 Name Varchar(50),
 				 StartDate DATETIME,
 				 EndDate DATETIME,
 				 LAT FLOAT,
@@ -54,9 +55,9 @@ BEGIN
 				 NameCity VARCHAR(255),
 				 AuxId BIGINT IDENTITY(1,1)
 	)
-
+	SELECT * FROM Ausar
 	INSERT INTO @GruposZonas 
-	SELECT DISTINCT Aus.ID Grupo, LocHab.StartDate StartDate,LocHab.EndDate EndDate,Aus.latitude LAT,Aus.longitude LON,LocHab.HabitId HabitId,Aus.City NameCity  FROM Locations Locs
+	SELECT DISTINCT Aus.ID Grupo, Aus.name Name,LocHab.StartDate StartDate,LocHab.EndDate EndDate,Aus.latitude LAT,Aus.longitude LON,LocHab.HabitId HabitId,Aus.City NameCity  FROM Locations Locs
 	INNER JOIN dbo.LocationsxHabit LocHab on LocHab.LocationId = Locs.LocationId
 	INNER JOIN dbo.Ausar Aus on geography::Point(Aus.latitude, Aus.longitude, 4326).STDistance(Locs.Location) = 0 
 
@@ -81,7 +82,7 @@ BEGIN
 			IF @i > (@Medios + @Pocos) AND @i <= @CantidadCheks
 				SET @AuxNum =(SELECT CAST(RAND()*(SELECT COUNT(AuxId) FROM @GruposZonas WHERE GrupoId = 3)+1 AS INT))
 
-			SELECT @FromDate = StartDate,	@ToDate = EndDate,	@latitudeReference = LAT,	@longitudeReference = LON,	@HabitId = HabitId,	@city = NameCity
+			SELECT @ResName = Name , @FromDate = StartDate,	@ToDate = EndDate,	@latitudeReference = LAT,	@longitudeReference = LON,	@HabitId = HabitId,	@city = NameCity
 			FROM @GruposZonas WHERE AuxId = @AuxNum
 			
 			IF @RanEndDat2 >= @FromDate AND @RanEndDat2 <= @ToDate
@@ -90,7 +91,7 @@ BEGIN
 
 					DECLARE @puntoRand FLOAT =  0.0001*(RAND()*100+10)*CAST(RAND()*9 AS INT)
 					DECLARE @locationPoint GEOGRAPHY = GEOGRAPHY::Point((@latitudeReference+@puntoRand), (@longitudeReference+@puntoRand), 4326)
-					INSERT INTO Locations VALUES (CONCAT('CheckIn',IDENT_CURRENT('Locations'),CAST(RAND()*IDENT_CURRENT('Locations') AS BIGINT)),@cityId,@locationPoint)
+					INSERT INTO Locations VALUES (CONCAT(@ResName,CAST(RAND()*(99999999-10000000)+10000000 AS BIGINT)),@cityId,@locationPoint)
 		
 					SET @locationidpoint =  SCOPE_IDENTITY()
 

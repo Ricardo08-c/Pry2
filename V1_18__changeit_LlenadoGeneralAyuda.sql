@@ -19,7 +19,7 @@ INSERT INTO [dbo].[TransType] VALUES
 ('Credito'),('Debito'),('Cancelación')	
 
 INSERT INTO [dbo].[TransSubTypes] VALUES
-('Ads'),('Patrocinio'),('Ganancia Patrocinio')	
+('Ads'),('Patrocinio'),('Ganancia Patrocinio'),('Ganancia ChangeIt')		
 
 -- Ayuda Habits
 INSERT INTO [dbo].[Habits] VALUES
@@ -51,13 +51,5 @@ INSERT INTO [dbo].[Achievements] VALUES
 (' de aluminio menos en el mar.'),
 (' menos para el efecto invernadero en el mundo.')
 
-INSERT INTO [dbo].[AcomplishedGoals] VALUES
-( @Quantity, 
-  @HabitId, 
-  @AchievmentId, 
-  @meassureUnit
-)
+
 -- EXEC [changeit_SP_GeneracionDeUsers] 100000
-
-
-select * from Habits
